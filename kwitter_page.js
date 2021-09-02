@@ -15,10 +15,27 @@ function getData() { firebase.database().ref("/"+roomname).on('value', function(
          firebase_message_id = childKey;
          message_data = childData;
 //Start code
-
+console.log(firebase_message_id)
+console.log(message_data)
+var lik= message_data['like']
+var nam= message_data['name']
+var messag= message_data['message']
+var name_html= "<h4>"+ nam+ "<img class= 'user_tick' src='tick.png'></h4>"
+message_html= "<h4 class='message_h4'>"+ messag + "</h4>"
+var like_html="<button class='btn btn-warning' id="+firebase_message_id+" value="+lik+" onclick='update_like(this.id)'>"
+var th_html="<span class='glyphicon glyphicon-thumbs-up'>"+lik+"</span></button><hr>"
+var row=name_html+ message_html+like_html+th_html
+document.getElementById("output").innerHTML+=row
 //End code
-      } });  }); }
+ } });  }); }
 getData();
+function update_like(msg_id){
+      var likes=document.getElementById(msg_id).value
+      var update=Number(likes)+1
+      firebase.database().ref(roomname).child(msg_id).update({
+            like: update
+      });
+}
 function send(){
       msg= document.getElementById("msg").value;
       firebase.database().ref(roomname).push({
